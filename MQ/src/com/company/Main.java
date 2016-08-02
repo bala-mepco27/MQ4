@@ -40,13 +40,16 @@ public class Main {
         String oper = "Sell";
         double price = 0.0;
         double cprice = 0.0;
-        Ticks tc = Ticks.getInstance("C:\\Users\\brajaraman\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\Price_List - Copy (2).txt");
+        Ticks tc = Ticks.getInstance("C:\\Users\\brajaraman\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\Price_List - Copy (3).txt");
         TickData dt = null;
         ArrayList<MoneyPair> mp = new ArrayList<MoneyPair>();
         MoneyPair mr = new MoneyPair();
         mr.DeleteEverything();
+        Calendar start = tc.GetTickData().date;
+        Calendar end = null;
         while((dt = tc.GetTickData())!= null)
         {
+            end = dt.date;
             if(oper.equals("Sell"))
             {
                 cprice = dt.Sell;
@@ -58,8 +61,12 @@ public class Main {
                 mr.BidTime = dt.date;
             }
 
-            double diff = Math.abs(Math.abs(cprice*) - Math.abs(price));
-            if(diff)
+            int i = (int)Math.abs(cprice * 100000);
+            int j = (int)Math.abs(price * 100000);
+            int k = (i-j);
+            int diff = (int)k;
+
+            System.out.println(Math.abs(diff));
 
             if(price == 0.0 || price == cprice)
             {
@@ -85,6 +92,9 @@ public class Main {
             }
             //tc = Ticks.getInstance("blah");
         }
+        System.out.println("Pairs: "+mp.size());
+
+        System.out.println((end.getTime().getTime()- start.getTime().getTime())/3600);
     }
 
 }
