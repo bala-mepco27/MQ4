@@ -7,13 +7,13 @@ import java.util.Calendar;
  */
 public class MoneyPair
 {
-    public Calendar BidTime;
+    public Calendar BuyTime;
     public Calendar SellTime;
     public double Rate;
 
     public void DeleteEverything()
     {
-        BidTime = null;
+        BuyTime = null;
         SellTime = null;
         Rate = 0.0;
     }

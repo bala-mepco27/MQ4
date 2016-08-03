@@ -21,15 +21,17 @@ public class Ticks {
 
     public TickData GetTickData()throws Exception
     {
-        TickData dt = null;
+         TickData dt = null;
         String ln = null;
         while((ln = reader.readLine())!=null) {
             String[] tokens = ln.split(",");
             if (tokens.length > 1) {
                 dt = new TickData(Double.parseDouble(tokens[0]), Double.parseDouble(tokens[1]), tokens[2]);
+                MarginCalculator.UpdateAccount(dt);
                 return dt;
             }else
                 return null;
+
         }
         return null;
     }
