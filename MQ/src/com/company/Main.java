@@ -94,7 +94,7 @@ public class Main {
         }
         System.out.println("Pairs: "+mp.size());
 
-        System.out.println((end.getTime().getTime()- start.getTime().getTime())/3600);
+        System.out.println("Hours : " + (end.getTimeInMillis() - start.getTimeInMillis())/(3600 * 1000));
     }
 
 }
