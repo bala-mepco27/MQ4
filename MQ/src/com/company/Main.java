@@ -18,7 +18,7 @@ public class Main {
         String oper = "Sell";
         double price = 0.0;
         double cprice = 0.0;
-        Ticks tc = Ticks.getInstance("C:\\Users\\brajaraman\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\Price_List - Copy (3).txt");
+        Ticks tc = Ticks.getInstance("C:\\Users\\brajaraman\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\Price_List.txt");
         TickData dt = null;
         ArrayList<MoneyPair> mp = new ArrayList<MoneyPair>();
         MoneyPair mr = new MoneyPair();
@@ -45,7 +45,7 @@ public class Main {
             int diff = (int)k;
             if( Math.abs(diff) > 100  && (price != 0 && cprice !=0))
             {
-                if(Utilities.OrderStatus(diff,oper))
+                if(Utilities.OrderStatus(diff,ReverseOperation(oper)))
                 {
                     System.out.println("***** GOOD - The Diff is greater than 100");
                 }
@@ -67,13 +67,13 @@ public class Main {
                 mr.Rate = cprice;
                 price = cprice;
                 cprice = 0.0;
+                oper = ReverseOperation(oper);
 
                 if((mr.SellTime != null) && (mr.BidTime != null))
                 {
                     price = 0.0;
                     mp.add(mr);
                     mr.DeleteEverything();
-                    oper = ReverseOperation(oper);
                 }
             }
         }

@@ -21,12 +21,12 @@ public class Utilities {
     {
         switch (type)
         {
-            case "Sell":
+            case "Buy":
                 if(diff >= 0)
                     return true;
                 else
                 return false;
-            case "Buy":
+            case "Sell":
                 if(diff <= 0)
                     return true;
                 else
