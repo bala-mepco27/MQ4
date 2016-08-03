@@ -3,34 +3,12 @@ package com.company;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
+import static com.company.Utilities.*;
+import static com.company.Utilities.ReverseOperation;
 
 /**
  * Created by brajaraman on 02/08/2016.
  */
-
-class MoneyPair
-{
-    public Calendar BidTime;
-    public Calendar SellTime;
-    public double Rate;
-
-    public void DeleteEverything()
-    {
-        BidTime = null;
-        SellTime = null;
-        Rate = 0.0;
-    }
-
-
-
-/*
-    MoneyPair(Calendar bt, Calendar st, double rt)
-    {
-        this.BidTime = bt;
-        this.SellTime = st;
-        this.Rate = rt;
-    }*/
-}
 
 
 public class Main {
@@ -61,36 +39,43 @@ public class Main {
                 mr.BidTime = dt.date;
             }
 
-            int i = (int)Math.abs(cprice * 100000);
-            int j = (int)Math.abs(price * 100000);
+            int i = (int)(cprice * 100000);
+            int j = (int)(price * 100000);
             int k = (i-j);
             int diff = (int)k;
+            if( Math.abs(diff) > 100  && (price != 0 && cprice !=0))
+            {
+                if(Utilities.OrderStatus(diff,oper))
+                {
+                    System.out.println("***** GOOD - The Diff is greater than 100");
+                }
+                else
+                {
+                    System.out.println("????? BAD - The Diff is greater than 100");
+                    oper = ReverseOperation(oper);
+                    if(oper.equals("Sell"))
+                        cprice = dt.Sell;
+                    else
+                        cprice = dt.Bid;
+                }
 
-            System.out.println(Math.abs(diff));
+                price = 0.0;
+            }
 
             if(price == 0.0 || price == cprice)
             {
                 mr.Rate = cprice;
                 price = cprice;
                 cprice = 0.0;
-                switch (oper)
-                {
-                    case "Sell":
-                        oper = "Buy";
-                        break;
-                    case "Buy":
-                        oper = "Sell";
-                        break;
-                }
 
                 if((mr.SellTime != null) && (mr.BidTime != null))
                 {
                     price = 0.0;
                     mp.add(mr);
                     mr.DeleteEverything();
+                    oper = ReverseOperation(oper);
                 }
             }
-            //tc = Ticks.getInstance("blah");
         }
         System.out.println("Pairs: "+mp.size());
 
