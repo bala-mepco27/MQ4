@@ -44,7 +44,7 @@ public class Main {
             int j = (int)(price * 100000);
             int k = (i-j);
             int diff = (int)k;
-            if( Math.abs(diff) > 50  && (price != 0 && cprice !=0))
+            if( Math.abs(diff) > 100  && (price != 0 && cprice !=0))
             {
                 if(Utilities.OrderStatus(diff,ReverseOperation(oper)))
                 {
@@ -61,11 +61,14 @@ public class Main {
                         cprice = dt.Buy;
                     bad++;
                 }
-                MarginCalculator.PrintCurrentStatus(false);
+                //MarginCalculator.PrintCurrentStatus(true);
                 MarginCalculator.SellLastOrder(price);
                 price = 0.0;
 
             }
+
+            if((price == 0.0 || price == 1.09689)&&(cprice == 1.09698 || cprice == 1.09689))
+                System.out.println(cprice);
 
             if(price == 0.0 || price == cprice)
             {
@@ -77,6 +80,7 @@ public class Main {
                     System.out.println("_-------------------- Luck has run out");
                     System.exit(1);
                 }
+                MarginCalculator.PrintCurrentStatus(false);
 
                 cprice = 0.0;
                 oper = ReverseOperation(oper);

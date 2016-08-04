@@ -1,6 +1,7 @@
 package com.company;
 
 import javax.jws.soap.SOAPBinding;
+import javax.rmi.CORBA.Util;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,16 +19,27 @@ public class MarginCalculator {
     public static ArrayList<OrderUnit> Orders = new ArrayList<OrderUnit>();
     public static boolean isXM = true;
 
+    public static int debug_count = 0;
+
     public static void UpdateAccount(TickData dt) {
         Current = Capital;
+        debug_count++;
+        if(debug_count == 10638)
+            System.out.println(debug_count);
         if (Orders.size() > 1) {
             for (OrderUnit unit : Orders) {
-                int val  = (int) Math.round(dt.Sell * 100000);
-                int diff = Math.abs(val - (int) (unit.price * 100000));
+                double price = 0.0;
+                if (unit.type.equals("Sell"))
+                    price = Data.Buy;
+                else
+                    price = Data.Sell;
+
+                int val  = (int) Math.round(price * 100000);
+                int diff = (val - (int) (unit.price * 100000));
                 if (Utilities.OrderStatus(diff, unit.type)) {
-                    Current = Current + (unit.vol * diff);
+                    Current = Current + (unit.vol * Math.abs(diff));
                 } else {
-                    Current = Current - (unit.vol * diff);
+                    Current = Current - (unit.vol * Math.abs(diff));
                 }
             }
         }
@@ -47,6 +59,8 @@ public class MarginCalculator {
             }
             Used = Math.abs(SellTotal - BidTotal);
         }
+        if(Used > 15.0)
+            System.out.println(Used);
     }
 
     public static boolean Order(double vol, String type) {
@@ -72,8 +86,27 @@ public class MarginCalculator {
     public static boolean SellLastOrder(double price)
     {
         if(Orders.get(Orders.size()-1).price == price)
-            Orders.remove(Orders.size()-1);
-        else
+        {
+            OrderUnit unit = Orders.get(Orders.size() - 1);
+            double diff = 0.0;
+            if(unit.type.equals("Sell"))
+                diff = Data.Buy - unit.price;
+            else
+                diff = Data.Sell - unit.price;
+
+            int diffval = (int)(diff * 100000);
+
+            if(Utilities.OrderStatus(diffval,unit.type))
+            {
+                Current = Current + Math.abs(diffval);
+            }
+            else {
+                Current = Current - Math.abs(diffval);
+            }
+
+            Orders.remove(Orders.size() - 1);
+            UpdateUsed();
+        }else
         {
             System.out.println("-------------------- Something has gone wrong");
             System.exit(1);
