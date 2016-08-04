@@ -85,6 +85,7 @@ public class MarginCalculator {
 
     public static boolean SellLastOrder(double price)
     {
+       // PrintCurrentStatus(true);
         if(Orders.get(Orders.size()-1).price == price)
         {
             OrderUnit unit = Orders.get(Orders.size() - 1);
@@ -98,10 +99,10 @@ public class MarginCalculator {
 
             if(Utilities.OrderStatus(diffval,unit.type))
             {
-                Current = Current + Math.abs(diffval);
+                Capital = Capital + (unit.vol * Math.abs(diffval));
             }
             else {
-                Current = Current - Math.abs(diffval);
+                Capital = Capital - (unit.vol * Math.abs(diffval));
             }
 
             Orders.remove(Orders.size() - 1);

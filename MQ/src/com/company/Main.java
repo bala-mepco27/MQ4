@@ -15,10 +15,10 @@ public class Main {
 
     public static void main(String ar[])throws Exception
     {
-        String oper = "Sell";
+        String oper = "Buy";
         double price = 0.0;
         double cprice = 0.0;
-        Ticks tc = Ticks.getInstance("C:\\Users\\brajaraman\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\Price_List - Copy (4).txt");
+        Ticks tc = Ticks.getInstance("C:\\Users\\User\\Desktop\\OncamMQData\\Price_List.txt");
         TickData dt = null;
         ArrayList<MoneyPair> mp = new ArrayList<MoneyPair>();
         MoneyPair mr = new MoneyPair();
@@ -44,7 +44,7 @@ public class Main {
             int j = (int)(price * 100000);
             int k = (i-j);
             int diff = (int)k;
-            if( Math.abs(diff) > 100  && (price != 0 && cprice !=0))
+            if( Math.abs(diff) > 50  && (price != 0 && cprice !=0))
             {
                 if(Utilities.OrderStatus(diff,ReverseOperation(oper)))
                 {
@@ -61,14 +61,16 @@ public class Main {
                         cprice = dt.Buy;
                     bad++;
                 }
-                //MarginCalculator.PrintCurrentStatus(true);
+                MarginCalculator.PrintCurrentStatus(false);
                 MarginCalculator.SellLastOrder(price);
                 price = 0.0;
+                mr.DeleteEverything();
+                continue;
 
             }
 
-            if((price == 0.0 || price == 1.09689)&&(cprice == 1.09698 || cprice == 1.09689))
-                System.out.println(cprice);
+           // if((price == 0.0 || price == 1.09689)&&(cprice == 1.09698 || cprice == 1.09689))
+               // System.out.println(cprice);
 
             if(price == 0.0 || price == cprice)
             {
@@ -80,7 +82,7 @@ public class Main {
                     System.out.println("_-------------------- Luck has run out");
                     System.exit(1);
                 }
-                MarginCalculator.PrintCurrentStatus(false);
+                //MarginCalculator.PrintCurrentStatus(false);
 
                 cprice = 0.0;
                 oper = ReverseOperation(oper);
